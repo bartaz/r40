@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Ryczące czterdziestki</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <script type="text/x-template" id="player-select-template">
+    <div>
+      Wybierz graczy:
+      <ul id="example-1">
+        <li v-for="player in players" :style="{ color: player.colour }">
+          <label>
+            <input
+              v-model="player.checked"
+              type="checkbox"
+              :disabled="player.checked && numberOfPlayers === 3"
+             />
+            <player :player="player"></player>
+          </label>
+        </li>
+      </ul>
+
+      <p>Liczba graczy: {{ numberOfPlayers }}</p>
+      <button v-on:click="startGame">
+       Start gry
+      </button>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="game-template">
+    <div>
+      <div v-if="currentPlayerId === null">
+        <p>Runda: {{round}}</p>
+        <p>Pierwszy gracz: <player :player="players[0]"></player></p>
+        <p>
+          <button @click="startRound(null)">
+           Start rundy [brak czasu]
+          </button>
+        </p>
+        <p>
+          <button @click="startRound(35)">
+           Start rundy [35s]
+          </button>
+        </p>
+        <p>
+          <button @click="startRound(30)">
+           Start rundy [30s]
+          </button>
+        </p>
+        <p>
+          <button @click="startRound(25)">
+           Start rundy [25s]
+          </button>
+        </p>
+      </div>
+
+      <turn
+        v-if="currentPlayerId !== null"
+        :player="players[currentPlayerId]"
+        :time="time"
+        :round="round"
+        @endTurn="endTurn">
+      </turn>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="turn-template">
+    <div>
+      <p>Runda: {{round}}</p>
+      <p>Tura gracza: <player :player="player"></player></p>
+      <p>Czas: {{currentTime}}</p>
+      <p><button @click="endTurn">Następna tura</button></p>
+    </div>
+  </script>
+
+  <div id='app'>
+    <h1>Ryczące czterdziestki</h1>
+    <player-select v-if="screen === 'home'" @start="startGame"></player-select>
+    <game v-if="screen === 'game'" :players="players"></game>
+  </div>
+
+  <script src="app.js" defer="true"></script>
+</body>
+</html>
