@@ -203,7 +203,9 @@ Vue.component('turn', {
       }, 1000);
     },
     stopTimer: function() {
-      this.currentTime = 0;
+      if (this.currentTime) {
+        this.currentTime = 0;
+      }
       clearInterval(this.interval);
       this.interval = null;
     },
