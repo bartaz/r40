@@ -63,19 +63,20 @@ Vue.component('player-select', {
 Vue.component('game', {
   template: '                                                                   \
     <div>                                                                       \
-      <div v-if="!activeRound">                                                 \
+      <player-select v-if="!players" @start="startGame" />                      \
+      <div v-else-if="!activeRound">                                            \
         <p>Runda: {{round}}</p>                                                 \
-        <p>Pierwszy gracz: <player :player="players[0]"></player></p>           \
+        <p>Pierwszy gracz: <player :player="players[0]" /></p>                  \
         <p><button @click="startRound(null)">Start rundy [∞]</button></p>       \
         <p><button @click="startRound(40)">Start rundy [40s]</button></p>       \
         <p><button @click="startRound(35)">Start rundy [35s]</button></p>       \
         <p><button @click="startRound(30)">Start rundy [30s]</button></p>       \
         <p><button @click="startRound(25)">Start rundy [25s]</button></p>       \
         <p><button @click="startRound(20)">Start rundy [20s]</button></p>       \
+        <p><button @click="players = null">Koniec gry</button></p>              \
       </div>                                                                    \
-                                                                                \
       <round                                                                    \
-        v-if="activeRound"                                                      \
+        v-else-if="activeRound"                                                 \
         :players="activeRound.players"                                          \
         :time="activeRound.time"                                                \
         :round="round"                                                          \
@@ -83,14 +84,18 @@ Vue.component('game', {
       </round>                                                                  \
     </div>                                                                      \
   ',
-  props: ['players'],
   data: function() {
     return {
       round: 1,
-      activeRound: null
+      activeRound: null,
+      players: null
     }
   },
   methods: {
+    startGame: function(players) {
+      this.round = 1;
+      this.players = players;
+    },
     startRound: function(time) {
       this.activeRound = {
         players: this.players,
@@ -248,19 +253,6 @@ Vue.component('timer', {
 // =====
 
 var app = new Vue({
-  template: '\
-    <player-select v-if="screen === \'home\'" @start="startGame"></player-select> \
-    <game v-else :players="players"></game>                                       \
-  ',
+  template: '<game />',
   el: '#app',
-  data: {
-    screen: "home", // "game", // TODO: turn into dynamic <component>
-    players: [],
-  },
-  methods: {
-    startGame: function(players) {
-      this.players = players;
-      this.screen = "game";
-    }
-  }
 });
