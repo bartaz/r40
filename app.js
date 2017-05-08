@@ -183,6 +183,10 @@ Vue.component('turn', {
       if (this.time) {
         this.startTimer(this.time);
       }
+
+      if (this.time === 0) {
+        this.endTurn();
+      }
     }
   },
   mounted: function() {
