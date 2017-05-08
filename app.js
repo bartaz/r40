@@ -9,26 +9,26 @@ Vue.component('player', {
 // PLAYER SELECT COMPONENT
 // =========================
 Vue.component('player-select', {
-  template: '                                                             \
-    <div>                                                                 \
-      Wybierz graczy:                                                     \
-      <ul id="example-1">                                                 \
-        <li v-for="player in players" :style="{ color: player.colour }">  \
-          <label>                                                         \
-            <input                                                        \
-              v-model="player.checked"                                    \
-              type="checkbox"                                             \
-              :disabled="player.checked && numberOfPlayers === 3"         \
-             />                                                           \
-            <player :player="player"></player>                            \
-          </label>                                                        \
-        </li>                                                             \
-      </ul>                                                               \
-      <p>Liczba graczy: {{ numberOfPlayers }}</p>                         \
-      <button v-on:click="startGame">                                     \
-       Start gry                                                          \
-      </button>                                                           \
-    </div>                                                                \
+  template: '                                                                   \
+    <div>                                                                       \
+      Wybierz graczy:                                                           \
+      <ul id="example-1">                                                       \
+        <li v-for="player in players" :style="{ color: player.colour }">        \
+          <label>                                                               \
+            <input                                                              \
+              v-model="player.checked"                                          \
+              type="checkbox"                                                   \
+              :disabled="player.checked && numberOfPlayers === 3"               \
+             />                                                                 \
+            <player :player="player"></player>                                  \
+          </label>                                                              \
+        </li>                                                                   \
+      </ul>                                                                     \
+      <p>Liczba graczy: {{ numberOfPlayers }}</p>                               \
+      <button v-on:click="startGame">                                           \
+       Start gry                                                                \
+      </button>                                                                 \
+    </div>                                                                      \
   ',
   data: function() {
     return { players: [
@@ -61,27 +61,27 @@ Vue.component('player-select', {
 // ================
 
 Vue.component('game', {
-  template: '                                                              \
-    <div>                                                                  \
-      <div v-if="!activeRound">                                            \
-        <p>Runda: {{round}}</p>                                            \
-        <p>Pierwszy gracz: <player :player="players[0]"></player></p>      \
-        <p><button @click="startRound(null)">Start rundy [∞]</button></p>  \
-        <p><button @click="startRound(40)">Start rundy [40s]</button></p>  \
-        <p><button @click="startRound(35)">Start rundy [35s]</button></p>  \
-        <p><button @click="startRound(30)">Start rundy [30s]</button></p>  \
-        <p><button @click="startRound(25)">Start rundy [25s]</button></p>  \
-        <p><button @click="startRound(20)">Start rundy [20s]</button></p>  \
-      </div>                                                               \
-                                                                           \
-      <round                                                               \
-        v-if="activeRound"                                                 \
-        :players="activeRound.players"                                     \
-        :time="activeRound.time"                                           \
-        :round="round"                                                     \
-        @endRound="endRound">                                              \
-      </round>                                                             \
-    </div>                                                                 \
+  template: '                                                                   \
+    <div>                                                                       \
+      <div v-if="!activeRound">                                                 \
+        <p>Runda: {{round}}</p>                                                 \
+        <p>Pierwszy gracz: <player :player="players[0]"></player></p>           \
+        <p><button @click="startRound(null)">Start rundy [∞]</button></p>       \
+        <p><button @click="startRound(40)">Start rundy [40s]</button></p>       \
+        <p><button @click="startRound(35)">Start rundy [35s]</button></p>       \
+        <p><button @click="startRound(30)">Start rundy [30s]</button></p>       \
+        <p><button @click="startRound(25)">Start rundy [25s]</button></p>       \
+        <p><button @click="startRound(20)">Start rundy [20s]</button></p>       \
+      </div>                                                                    \
+                                                                                \
+      <round                                                                    \
+        v-if="activeRound"                                                      \
+        :players="activeRound.players"                                          \
+        :time="activeRound.time"                                                \
+        :round="round"                                                          \
+        @endRound="endRound">                                                   \
+      </round>                                                                  \
+    </div>                                                                      \
   ',
   props: ['players'],
   data: function() {
@@ -162,14 +162,14 @@ Vue.component('round', {
 // ================
 
 Vue.component('turn', {
-  template: '                                                 \
-    <div>                                                     \
-      <p>Runda: {{round}}</p>                                 \
-      <p>Tura gracza: <player :player="player"></player></p>  \
-      <p><timer :player="player" :time="currentTime"></timer></p> \
-      <p><button @click="endTurn">Następna tura</button></p>  \
-      <p><button @click="endRound">Koniec rundy</button></p>  \
-    </div>                                                    \
+  template: '                                                                   \
+    <div>                                                                       \
+      <p>Runda: {{round}}</p>                                                   \
+      <p>Tura gracza: <player :player="player"></player></p>                    \
+      <p><timer :player="player" :time="currentTime"></timer></p>               \
+      <p><button @click="endTurn">Następna tura</button></p>                    \
+      <p><button @click="endRound">Koniec rundy</button></p>                    \
+    </div>                                                                      \
   ',
   props: ['round', 'player', 'time'],
   data: function() {
