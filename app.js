@@ -166,7 +166,7 @@ Vue.component('turn', {
     <div>                                                     \
       <p>Runda: {{round}}</p>                                 \
       <p>Tura gracza: <player :player="player"></player></p>  \
-      <p>Czas: {{currentTime}}</p>                            \
+      <p><timer :player="player" :time="currentTime"></timer></p> \
       <p><button @click="endTurn">Następna tura</button></p>  \
       <p><button @click="endRound">Koniec rundy</button></p>  \
     </div>                                                    \
@@ -221,6 +221,25 @@ Vue.component('turn', {
     endRound: function() {
       this.stopTimer();
       this.$emit('endRound');
+    }
+  }
+});
+
+
+// TIME COMPONENT
+// ================
+
+Vue.component('timer', {
+  template: '<div class="time" :style="style">{{ displayTime }}</div>',
+  props: ['player', 'time'],
+  computed: {
+    displayTime: function () {
+      return this.time === null ? "∞" : this.time;
+    },
+    style: function() {
+      return {
+        backgroundColor: this.player.colour
+      }
     }
   }
 });

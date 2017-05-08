@@ -1,3 +1,16 @@
 body {
   background: #BBB;
+  margin: 20px;
+}
+
+.time {
+  display: block;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  font-size: 200px;
+  text-align: center;
+  line-height: 300px;
+  color: white;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
