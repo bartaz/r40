@@ -32,7 +32,7 @@
 
   <script type="text/x-template" id="game-template">
     <div>
-      <div v-if="currentPlayerId === null">
+      <div v-if="!activeRound">
         <p>Runda: {{round}}</p>
         <p>Pierwszy gracz: <player :player="players[0]"></player></p>
         <p>
@@ -67,13 +67,13 @@
         </p>
       </div>
 
-      <turn
-        v-if="currentPlayerId !== null"
-        :player="players[currentPlayerId]"
-        :time="time"
+      <round
+        v-if="activeRound"
+        :players="activeRound.players"
+        :time="activeRound.time"
         :round="round"
-        @endTurn="endTurn">
-      </turn>
+        @endRound="endRound">
+      </round>
     </div>
   </script>
 
@@ -83,6 +83,7 @@
       <p>Tura gracza: <player :player="player"></player></p>
       <p>Czas: {{currentTime}}</p>
       <p><button @click="endTurn">Następna tura</button></p>
+      <p><button @click="endRound">Koniec rundy</button></p>
     </div>
   </script>
 

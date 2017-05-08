@@ -46,32 +46,76 @@ Vue.component('game', {
   data: function() {
     return {
       round: 1,
-      currentPlayerId: null,
-      time: null,
+      activeRound: null
     }
   },
   methods: {
     startRound: function(time) {
-      this.currentPlayerId =  0;
-      this.time = time;
-    },
-    endTurn: function() {
-      var nextPlayer = this.currentPlayerId + 1;
-
-      if (this.players[nextPlayer]) {
-        // next turn
-        this.currentPlayerId = nextPlayer;
-      } else {
-        // end round
-        this.currentPlayerId = null;
-        this.time = null;
-        this.round = this.round + 1;
-        var player = this.players.shift();
-        this.players.push(player);
+      this.activeRound = {
+        players: this.players,
+        time: time
       }
+    },
+    endRound: function() {
+      this.activeRound = null;
+      this.round = this.round + 1;
+
+      var player = this.players.shift();
+      this.players.push(player);
     }
   }
 })
+
+
+// ROUND COMPONENT
+
+Vue.component('round', {
+  template: '<turn v-if="currentTurn !== null" :player="currentTurn.player" :time="currentTurn.time" :round="round" @endTurn="endTurn" @endRound="endRound"></turn>',
+  props: ['round', 'players', 'time'],
+  data: function() {
+    var self = this;
+    return {
+      playerTimes: this.players.map(function(player) {
+        return { player: player, time: self.time }
+      }),
+      currentPlayerId: 0,
+      currentTurn: null
+    }
+  },
+  computed: {
+    activeTurns: function() {
+      return this.playerTimes.filter(function (turn) { return (turn.time === null) || (turn.time > 0) });
+    }
+  },
+  mounted: function() {
+    this.currentPlayerId = 0;
+    this.currentTurn = this.playerTimes[0];
+  },
+  methods: {
+    endTurn: function(time) {
+      this.currentTurn.time = time;
+
+      if (this.activeTurns.length) {
+        // next turn
+        var nextPlayer = this.currentPlayerId + 1;
+        if (!this.playerTimes[nextPlayer]) {
+          nextPlayer = 0;
+        }
+        this.currentPlayerId = nextPlayer;
+        this.currentTurn = this.playerTimes[nextPlayer];
+      } else {
+        // end round
+        this.endRound();
+      }
+    },
+    endRound: function() {
+      // end round
+      this.currentPlayerId = null;
+      this.currentTurn = null;
+      this.$emit('endRound');
+    }
+  }
+});
 
 // TURN COMPONENT
 // ================
@@ -110,13 +154,18 @@ Vue.component('turn', {
       }, 1000);
     },
     stopTimer: function() {
-      this.currentTime = null;
+      this.currentTime = 0;
       clearInterval(this.interval);
       this.interval = null;
     },
     endTurn: function() {
+      var time = this.currentTime;
       this.stopTimer();
-      this.$emit('endTurn');
+      this.$emit('endTurn', time);
+    },
+    endRound: function() {
+      this.stopTimer();
+      this.$emit('endRound');
     }
   }
 });
