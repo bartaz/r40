@@ -121,7 +121,9 @@ Vue.component('round', {
     var self = this;
     return {
       playerTimes: this.players.map(function(player) {
-        return { player: player, time: self.time }
+        return {
+          player: player,
+          time: self.time === null ? self.time : self.time * 100 }
       }),
       currentPlayerId: 0,
       currentTurn: null
@@ -221,7 +223,7 @@ Vue.component('turn', {
         if (self.currentTime < 0) {
           self.stopTimer();
         }
-      }, 1000);
+      }, 10);
     },
     stopTimer: function() {
       if (this.currentTime) {
@@ -247,11 +249,29 @@ Vue.component('turn', {
 // ================
 
 Vue.component('timer', {
-  template: '<div class="time" :style="style">{{ displayTime }}</div>',
+  template: ' \
+    <div class="time" :style="style"> \
+      <span class="seconds">{{ displaySeconds }}</span><span class="miliseconds">{{ displayMiliseconds }}</span> \
+    </div>',
   props: ['player', 'time'],
   computed: {
-    displayTime: function () {
-      return this.time === null ? "∞" : this.time;
+    displaySeconds: function() {
+      if (this.time === null) {
+        return "∞"
+      }
+      return (this.seconds < 10 ? "0" : "") + this.seconds;
+    },
+    displayMiliseconds: function() {
+      if (this.time === null) {
+        return ""
+      }
+      return ":" + ~~(this.miliseconds / 10);
+    },
+    seconds: function () {
+      return  s = ~~(this.time / 100);
+    },
+    miliseconds: function () {
+      return this.time - (this.seconds * 100);
     },
     style: function() {
       return {
