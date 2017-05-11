@@ -1,10 +1,21 @@
 body {
-  background: #BBB;
-  margin: 20px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background: #F4F4F4;
+  padding: 20px;
+  font-size: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 0.5em 0;
+  font-size: 1.5em;
+  font-weight: 500;
 }
 
 .time {
   display: block;
+  margin: 0 auto;
   width: 300px;
   height: 300px;
   border-radius: 50%;
@@ -13,4 +24,38 @@ body {
   line-height: 300px;
   color: white;
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  width: 100%;
+  margin-bottom: 0;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.42;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+/* #FFCC00 */
+/* #1155FF */
+/* #00BB33 */
+/* #DD3311 */
+/* #8833DD */
+/* #AA4400 */
