@@ -112,7 +112,6 @@ Vue.component('game', {
   }
 })
 
-
 // ROUND COMPONENT
 
 Vue.component('round', {
@@ -140,7 +139,6 @@ Vue.component('round', {
   methods: {
     endTurn: function(time) {
       this.currentTurn.time = time;
-
       if (this.activeTurns.length) {
         // next turn
         var nextPlayer = this.currentPlayerId + 1;
@@ -171,7 +169,10 @@ Vue.component('turn', {
     <div>                                                                       \
       <p>Runda: {{round}}</p>                                                   \
       <p>Tura gracza: <player :player="player"></player></p>                    \
-      <p><timer :player="player" :time="currentTime"></timer></p>               \
+      <p>                                                                       \
+        <timer :player="player" :time="currentTime" @touchend.native="endTurn"> \
+        </timer>                                                                \
+      </p>                                                                      \
       <p><button @click="endTurn">Następna tura</button></p>                    \
       <p><button @click="endRound">Koniec rundy</button></p>                    \
     </div>                                                                      \
@@ -180,7 +181,8 @@ Vue.component('turn', {
   data: function() {
     return {
       currentTime: this.time,
-      interval: null
+      interval: null,
+      keyboardCallback: null
     }
   },
   watch: {
@@ -198,6 +200,16 @@ Vue.component('turn', {
     if (this.time) {
       this.startTimer(this.time);
     }
+    var self = this;
+    this.keyboardCallback = function(event){
+      if (event.keyCode === 32) {
+        self.endTurn();
+      }
+    }
+    document.addEventListener('keyup', this.keyboardCallback);
+  },
+  destroyed: function() {
+    document.removeEventListener('keyup', this.keyboardCallback);
   },
   methods: {
     startTimer: function(time) {
