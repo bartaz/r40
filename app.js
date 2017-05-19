@@ -97,6 +97,8 @@ Vue.component('game', {
       this.players = players;
     },
     startRound: function(time) {
+      initSound();
+
       this.activeRound = {
         players: this.players,
         time: time
@@ -221,6 +223,8 @@ Vue.component('turn', {
       this.interval = setInterval(function() {
         self.currentTime = self.currentTime -1;
         if (self.currentTime < 0) {
+          playExplosion();
+
           self.stopTimer();
         }
       }, 10);
@@ -288,3 +292,19 @@ var app = new Vue({
   template: '<game />',
   el: '#app',
 });
+
+// SOUND
+// =======
+
+var explosion = new Audio('./explosion.mp3');
+
+function initSound() {
+  explosion.play();
+  explosion.pause();
+  explosion.currentTime = 0;
+}
+
+function playExplosion() {
+  explosion.currentTime = 0;
+  explosion.play();
+}
