@@ -13,7 +13,7 @@ h1 {
   font-weight: 500;
 }
 
-.time {
+.timer {
   display: block;
   margin: 0 auto;
   width: 300px;
@@ -29,9 +29,16 @@ h1 {
   -ms-user-select: none;
   user-select: none;
 }
-.time .seconds {
+.timer .seconds {
   font-size: 150px;
 }
+
+.timer.red     { background-color: #DD3311; }
+.timer.green   { background-color: #00BB33; }
+.timer.blue    { background-color: #1155FF; }
+.timer.yellow  { background-color: #FFCC00; }
+.timer.purple  { background-color: #8833DD; }
+.timer.brown   { background-color: #AA4400; }
 
 button {
   display: inline-block;
@@ -55,6 +62,30 @@ button {
   border: 1px solid transparent;
   border-radius: 4px;
 }
+
+.player.red     { color: #DD3311; }
+.player.green   { color: #00BB33; }
+.player.blue    { color: #1155FF; }
+.player.yellow  { color: #FFCC00; }
+.player.purple  { color: #8833DD; }
+.player.brown   { color: #AA4400; }
+
+
+
+.color {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  background-color: transparent;
+}
+
+.color.red    .meeple { fill: #DD3311; }
+.color.green  .meeple { fill: #00BB33; }
+.color.blue   .meeple { fill: #1155FF; }
+.color.yellow .meeple { fill: #FFCC00; }
+.color.purple .meeple { fill: #8833DD; }
+.color.brown  .meeple { fill: #AA4400; }
+
 
 /* #FFCC00 */
 /* #1155FF */

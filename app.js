@@ -2,9 +2,43 @@
 // =========================
 
 Vue.component('player', {
-  template: '<span :style="{ color: player.colour }">{{ player.name }}</span>',
-  props: ['player']
+  template: '<span :class="classNames">{{ player.name }}</span>',
+  props: ['player'],
+  computed: {
+    classNames: function() {
+      return [ 'player', this.player.color ];
+    }
+  }
 })
+
+// PLAYER COLOR COMPONENT
+// ========================
+
+// icon source: https://thenounproject.com/term/meeple/1269/
+var meeple = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path class="meeple" fill-rule="evenodd" clip-rule="evenodd" d="M100 43c.6-13.7-32.4-20.4-33.8-22C65.5 20.2 68 0 50 0 32 0 34.5 20.2 33.8 21 32.4 22.6-.6 29.3 0 43c.6 13.8 18 6.7 21.8 10.8C25 57.3 6.5 80 4.4 94.4 3.8 99 5 100 9.6 100H33c3.4 0 4.5-2 6.2-4.5 3.8-5.8 8.3-15 10.8-15s7 9.2 10.8 15c1.7 2.6 2.8 4.5 6 4.5h23.6c4.5 0 5.8-1 5.2-5.6-2-14.4-20.6-37-17.4-40.6 3.7-4 21.2 3 21.8-10.8z"/></svg>';
+
+Vue.component('color', {
+  template: '<button :class="classNames" @click="changeColor">'+ meeple +'</button>',
+  props: ['player'],
+  computed: {
+    classNames: function() {
+      return ['color', this.player.color]
+    },
+    nextColor: function() {
+      var colors = ["red", "green", "blue", "yellow", "purple", "brown"];
+
+      var current = colors.indexOf(this.player.color);
+      var next = current < colors.length-1 ? current + 1 : 0;
+
+      return colors[next];
+    }
+  },
+  methods: {
+    changeColor: function() {
+      this.$emit('change', this.player, this.nextColor);
+    }
+  }
+});
 
 // PLAYER SELECT COMPONENT
 // =========================
@@ -13,7 +47,7 @@ Vue.component('player-select', {
     <div>                                                                       \
       Wybierz graczy:                                                           \
       <ul id="example-1">                                                       \
-        <li v-for="player in players" :style="{ color: player.colour }">        \
+        <li v-for="player in players" :style="{ color: player.color }">         \
           <label>                                                               \
             <input                                                              \
               v-model="player.checked"                                          \
@@ -22,6 +56,7 @@ Vue.component('player-select', {
              />                                                                 \
             <player :player="player"></player>                                  \
           </label>                                                              \
+          <color :player="player" @change="changeColor"></color>                \
         </li>                                                                   \
       </ul>                                                                     \
       <p>Liczba graczy: {{ numberOfPlayers }}</p>                               \
@@ -32,12 +67,12 @@ Vue.component('player-select', {
   ',
   data: function() {
     return { players: [
-      { checked: true, name: "Player 1", colour: "red" },
-      { checked: true, name: "Player 2", colour: "green" },
-      { checked: true, name: "Player 3", colour: "blue" },
-      { checked: false, name: "Player 4", colour: "yellow" },
-      { checked: false, name: "Player 5", colour: "purple" },
-      { checked: false, name: "Player 6", colour: "brown" }
+      { checked: true, name: "Player 1", color: "red" },
+      { checked: true, name: "Player 2", color: "green" },
+      { checked: true, name: "Player 3", color: "blue" },
+      { checked: false, name: "Player 4", color: "yellow" },
+      { checked: false, name: "Player 5", color: "purple" },
+      { checked: false, name: "Player 6", color: "brown" }
     ] }
   },
   computed: {
@@ -53,6 +88,9 @@ Vue.component('player-select', {
   methods: {
     startGame: function() {
       this.$emit('start', this.checkedPlayers)
+    },
+    changeColor: function(player, color) {
+      player.color = color;
     }
   }
 });
@@ -253,9 +291,10 @@ Vue.component('turn', {
 // ================
 
 Vue.component('timer', {
-  template: ' \
-    <div class="time" :style="style"> \
-      <span class="seconds">{{ displaySeconds }}</span><span class="miliseconds">{{ displayMiliseconds }}</span> \
+  template: '                                                                   \
+    <div :class="classNames">                                                   \
+      <span class="seconds">{{ displaySeconds }}</span>                         \
+      <span class="miliseconds">{{ displayMiliseconds }}</span>                 \
     </div>',
   props: ['player', 'time'],
   computed: {
@@ -277,10 +316,8 @@ Vue.component('timer', {
     miliseconds: function () {
       return this.time - (this.seconds * 100);
     },
-    style: function() {
-      return {
-        backgroundColor: this.player.colour
-      }
+    classNames: function() {
+      return ['timer', this.player.color]
     }
   }
 });
