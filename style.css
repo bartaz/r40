@@ -13,6 +13,18 @@ h1 {
   font-weight: 500;
 }
 
+input[type=checkbox] { transform: scale(1.6) }
+
+.player-select ul {
+  list-style: none;
+  margin: 5px;
+  padding: 0;
+}
+
+.player-select .disabled {
+  filter: grayscale(80%);
+}
+
 .timer {
   display: block;
   margin: 0 auto;
@@ -70,9 +82,30 @@ button {
 .player.purple  { color: #8833DD; }
 .player.brown   { color: #AA4400; }
 
+.player-input {
+  background: none;
+  border: 0;
+  font-size: 1em;
+  height: 20px;
+  line-height: 20px;
+  width: 180px;
+  padding: 5px;
+  margin: 5px 0;
+}
 
+.player-input:focus {
+  background: rgba(255,255,255,0.5);
+}
+
+.player-input.red     { color: #DD3311; }
+.player-input.green   { color: #00BB33; }
+.player-input.blue    { color: #1155FF; }
+.player-input.yellow  { color: #FFCC00; }
+.player-input.purple  { color: #8833DD; }
+.player-input.brown   { color: #AA4400; }
 
 .color {
+  margin-left: 5px;
   width: 40px;
   height: 40px;
   padding: 5px;
