@@ -114,7 +114,9 @@ Vue.component('game', {
       <player-select v-if="!players" @start="startGame" />                      \
       <div v-else-if="!activeRound">                                            \
         <p>Runda: {{round}}</p>                                                 \
-        <p>Pierwszy gracz: <player :player="players[0]" /></p>                  \
+        <p @click="changeFirstPlayer">                                          \
+          Pierwszy gracz: <player :player="players[0]" />                       \
+        </p>                                                                    \
         <p><button @click="startRound(null)">Start rundy [∞]</button></p>       \
         <p><button @click="startRound(40)">Start rundy [40s]</button></p>       \
         <p><button @click="startRound(35)">Start rundy [35s]</button></p>       \
@@ -152,12 +154,14 @@ Vue.component('game', {
         time: time
       }
     },
+    changeFirstPlayer: function() {
+      var player = this.players.shift();
+      this.players.push(player);
+    },
     endRound: function() {
       this.activeRound = null;
       this.round = this.round + 1;
-
-      var player = this.players.shift();
-      this.players.push(player);
+      this.changeFirstPlayer();
     }
   }
 })
@@ -222,7 +226,7 @@ Vue.component('turn', {
       <p>Runda: {{round}}</p>                                                   \
       <p>Tura gracza: <player :player="player"></player></p>                    \
       <p>                                                                       \
-        <timer :player="player" :time="currentTime" @touchend.native="endTurn"> \
+        <timer :player="player" :time="currentTime" @touchend.native.prevent="endTurn"> \
         </timer>                                                                \
       </p>                                                                      \
       <p><button @click="endTurn">Następna tura</button></p>                    \
