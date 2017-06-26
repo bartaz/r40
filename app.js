@@ -117,12 +117,10 @@ Vue.component('game', {
         <p @click="changeFirstPlayer">                                          \
           Pierwszy gracz: <player :player="players[0]" />                       \
         </p>                                                                    \
-        <p><button @click="startRound(null)">Start rundy [∞]</button></p>       \
         <p><button @click="startRound(40)">Start rundy [40s]</button></p>       \
         <p><button @click="startRound(35)">Start rundy [35s]</button></p>       \
         <p><button @click="startRound(30)">Start rundy [30s]</button></p>       \
         <p><button @click="startRound(25)">Start rundy [25s]</button></p>       \
-        <p><button @click="startRound(20)">Start rundy [20s]</button></p>       \
         <p><button @click="players = null">Koniec gry</button></p>              \
       </div>                                                                    \
       <round                                                                    \
