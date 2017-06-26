@@ -182,7 +182,7 @@ Vue.component('game', {
 // ROUND COMPONENT
 
 Vue.component('round', {
-  template: '<turn v-if="currentTurn !== null" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="endRound"></turn>',
+  template: '<turn v-if="currentTurn !== null" :nextPlayer="nextActivePlayer" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="endRound"></turn>',
   props: ['round', 'players', 'time'],
   data: function() {
     var self = this;
@@ -194,7 +194,8 @@ Vue.component('round', {
       }),
       paused: true,
       currentPlayerId: 0,
-      currentTurn: null
+      currentTurn: null,
+      nextActivePlayer: null
     }
   },
   computed: {
@@ -205,6 +206,7 @@ Vue.component('round', {
   mounted: function() {
     this.currentPlayerId = 0;
     this.currentTurn = this.playerTimes[0];
+    this.nextActivePlayer = this.playerTimes[1].player;
   },
   methods: {
     pause: function(paused) {
@@ -220,6 +222,17 @@ Vue.component('round', {
         }
         this.currentPlayerId = nextPlayer;
         this.currentTurn = this.playerTimes[nextPlayer];
+
+        // next active player
+        var nextActivePlayer = nextPlayer;
+
+        do {
+          nextActivePlayer = (nextActivePlayer + 1) % this.playerTimes.length;
+        } while (!this.playerTimes[nextActivePlayer].time);
+
+        if (this.playerTimes[nextActivePlayer].time > 0) {
+          this.nextActivePlayer = this.playerTimes[nextActivePlayer].player;
+        }
       } else {
         // end round
         this.endRound();
@@ -241,17 +254,17 @@ Vue.component('turn', {
   template: '                                                                   \
     <div>                                                                       \
       <p>Runda: {{round}}</p>                                                   \
-      <p>Tura gracza: <player :player="player"></player></p>                    \
+      <p>Gracz: <player :player="player"></player> > <player :player="nextPlayer"></player></p> \
       <p>                                                                       \
-        <timer :player="player" :time="currentTime" @touchend.native.prevent="nextTurn"> \
+        <timer :player="player" :nextPlayer="nextPlayer" :time="currentTime" @touchend.native.prevent="nextTurn"> \
         </timer>                                                                \
       </p>                                                                      \
       <p v-if="paused"><button @click="nextTurn">Start tury</button></p>        \
-      <p v-else><button @click="nextTurn">Następna tura</button></p>            \
+      <p v-else><button @click="nextTurn">Następna tura [<player :player="nextPlayer"></player>]</button></p> \
       <p><button @click="endRound">Koniec rundy</button></p>                    \
     </div>                                                                      \
   ',
-  props: ['round', 'player', 'time', 'paused'],
+  props: ['round', 'player', 'time', 'paused', 'nextPlayer'],
   data: function() {
     return {
       currentTime: this.time,
@@ -338,7 +351,7 @@ Vue.component('timer', {
         {{ displaySeconds }}</span><span class="miliseconds">{{ displayMiliseconds }} \
       </span>                                                                   \
     </div>',
-  props: ['player', 'time'],
+  props: ['player', 'time', 'nextPlayer'],
   computed: {
     displaySeconds: function() {
       if (this.time === null) {
@@ -359,7 +372,7 @@ Vue.component('timer', {
       return this.time - (this.seconds * 100);
     },
     classNames: function() {
-      return ['timer', this.player.color]
+      return ['timer', this.player.color, this.player.color !== this.nextPlayer.color ? 'next-' + this.nextPlayer.color : '']
     }
   }
 });

@@ -52,6 +52,13 @@ input[type=checkbox] { transform: scale(1.6) }
 .timer.purple  { background-color: #8833DD; }
 .timer.brown   { background-color: #AA4400; }
 
+.timer.next-red     { box-shadow: 150px 0 #DD3311; }
+.timer.next-green   { box-shadow: 150px 0 #00BB33; }
+.timer.next-blue    { box-shadow: 150px 0 #1155FF; }
+.timer.next-yellow  { box-shadow: 150px 0 #FFCC00; }
+.timer.next-purple  { box-shadow: 150px 0 #8833DD; }
+.timer.next-brown   { box-shadow: 150px 0 #AA4400; }
+
 button {
   display: inline-block;
   padding: 10px 20px;
