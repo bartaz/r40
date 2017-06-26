@@ -113,42 +113,59 @@ Vue.component('game', {
     <div>                                                                       \
       <player-select v-if="!players" @start="startGame" />                      \
       <div v-else-if="!activeRound">                                            \
-        <p>Runda: {{round}}</p>                                                 \
         <p @click="changeFirstPlayer">                                          \
           Pierwszy gracz: <player :player="players[0]" />                       \
         </p>                                                                    \
-        <p><button @click="startRound(40)">Start rundy [40s]</button></p>       \
-        <p><button @click="startRound(35)">Start rundy [35s]</button></p>       \
-        <p><button @click="startRound(30)">Start rundy [30s]</button></p>       \
-        <p><button @click="startRound(25)">Start rundy [25s]</button></p>       \
+        <p><button @click="startRound(1, 40)">                                  \
+          Start rundy 1 [40s, <player :player="getFirstPlayerForRound(1)" />]   \
+        </button></p>                                                           \
+        <p><button @click="startRound(2, 35)">                                  \
+          Start rundy 2 [35s, <player :player="getFirstPlayerForRound(2)" />]   \
+        </button></p>                                                           \
+        <p><button @click="startRound(3, 30)">                                  \
+          Start rundy 3 [30s, <player :player="getFirstPlayerForRound(3)" />]   \
+        </button></p>                                                           \
+        <p><button @click="startRound(4, 25)">                                  \
+          Start rundy 4 [25s, <player :player="getFirstPlayerForRound(4)" />]   \
+        </button></p>                                                           \
         <p><button @click="players = null">Koniec gry</button></p>              \
       </div>                                                                    \
       <round                                                                    \
         v-else-if="activeRound"                                                 \
         :players="activeRound.players"                                          \
         :time="activeRound.time"                                                \
-        :round="round"                                                          \
+        :round="activeRound.round"                                              \
         @endRound="endRound">                                                   \
       </round>                                                                  \
     </div>                                                                      \
   ',
   data: function() {
     return {
-      round: 1,
       activeRound: null,
       players: null
     }
   },
   methods: {
     startGame: function(players) {
-      this.round = 1;
       this.players = players;
     },
-    startRound: function(time) {
+    getFirstPlayerForRound: function(round) {
+      return this.players[(round - 1) * (this.players.length < 5 ? 1 : 2) % this.players.length];
+    },
+    startRound: function(round, time) {
+      var players = this.players.slice();
+      var player;
+
+      while (players[0] !== this.getFirstPlayerForRound(round)) {
+        player = players.shift();
+        players.push(player);
+      }
+
       initSound();
 
       this.activeRound = {
-        players: this.players,
+        round: round,
+        players: players,
         time: time
       }
     },
@@ -158,8 +175,6 @@ Vue.component('game', {
     },
     endRound: function() {
       this.activeRound = null;
-      this.round = this.round + 1;
-      this.changeFirstPlayer();
     }
   }
 })
