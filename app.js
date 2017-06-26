@@ -182,7 +182,7 @@ Vue.component('game', {
 // ROUND COMPONENT
 
 Vue.component('round', {
-  template: '<turn v-if="currentTurn !== null" :player="currentTurn.player" :time="currentTurn.time" :round="round" @endTurn="endTurn" @endRound="endRound"></turn>',
+  template: '<turn v-if="currentTurn !== null" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="endRound"></turn>',
   props: ['round', 'players', 'time'],
   data: function() {
     var self = this;
@@ -192,6 +192,7 @@ Vue.component('round', {
           player: player,
           time: self.time === null ? self.time : self.time * 100 }
       }),
+      paused: true,
       currentPlayerId: 0,
       currentTurn: null
     }
@@ -206,6 +207,9 @@ Vue.component('round', {
     this.currentTurn = this.playerTimes[0];
   },
   methods: {
+    pause: function(paused) {
+      this.paused = paused;
+    },
     endTurn: function(time) {
       this.currentTurn.time = time;
       if (this.activeTurns.length) {
@@ -239,14 +243,15 @@ Vue.component('turn', {
       <p>Runda: {{round}}</p>                                                   \
       <p>Tura gracza: <player :player="player"></player></p>                    \
       <p>                                                                       \
-        <timer :player="player" :time="currentTime" @touchend.native.prevent="endTurn"> \
+        <timer :player="player" :time="currentTime" @touchend.native.prevent="nextTurn"> \
         </timer>                                                                \
       </p>                                                                      \
-      <p><button @click="endTurn">Następna tura</button></p>                    \
+      <p v-if="paused"><button @click="nextTurn">Start tury</button></p>        \
+      <p v-else><button @click="nextTurn">Następna tura</button></p>            \
       <p><button @click="endRound">Koniec rundy</button></p>                    \
     </div>                                                                      \
   ',
-  props: ['round', 'player', 'time'],
+  props: ['round', 'player', 'time', 'paused'],
   data: function() {
     return {
       currentTime: this.time,
@@ -256,23 +261,25 @@ Vue.component('turn', {
   },
   watch: {
     player: function(player1, player2) {
-      if (this.time) {
+      if (this.time && !this.paused) {
         this.startTimer(this.time);
       }
 
       if (this.time === 0) {
         this.endTurn();
       }
+    },
+    paused: function() {
+      if (this.time && !this.paused) {
+        this.startTimer(this.time);
+      }
     }
   },
   mounted: function() {
-    if (this.time) {
-      this.startTimer(this.time);
-    }
     var self = this;
     this.keyboardCallback = function(event){
       if (event.keyCode === 32) {
-        self.endTurn();
+        self.nextTurn();
       }
     }
     document.addEventListener('keyup', this.keyboardCallback);
@@ -300,6 +307,13 @@ Vue.component('turn', {
       }
       clearInterval(this.interval);
       this.interval = null;
+    },
+    nextTurn: function() {
+      if (this.paused) {
+        this.$emit('pause', false);
+      } else {
+        this.endTurn();
+      }
     },
     endTurn: function() {
       var time = this.currentTime;
