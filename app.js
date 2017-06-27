@@ -73,6 +73,10 @@ Vue.component('player-select', {
         </li>                                                                   \
       </ul>                                                                     \
       <p>Liczba graczy: {{ numberOfPlayers }}</p>                               \
+      <p>                                                                       \
+        <i>Kliknij pionek by zmienić kolor gracza.</i><br/>                     \
+        <i>Kliknij nazwę gracza by wpisać imię.</i>                             \
+      </p>                                                                      \
       <button v-on:click="startGame">                                           \
        Start gry                                                                \
       </button>                                                                 \
@@ -80,12 +84,12 @@ Vue.component('player-select', {
   ',
   data: function() {
     return { players: [
-      { checked: true, name: "Player 1", color: "red" },
-      { checked: true, name: "Player 2", color: "green" },
-      { checked: true, name: "Player 3", color: "blue" },
-      { checked: false, name: "Player 4", color: "yellow" },
-      { checked: false, name: "Player 5", color: "purple" },
-      { checked: false, name: "Player 6", color: "black" }
+      { checked: true, name: "Gracz 1", color: "red" },
+      { checked: true, name: "Gracz 2", color: "green" },
+      { checked: true, name: "Gracz 3", color: "blue" },
+      { checked: false, name: "Gracz 4", color: "yellow" },
+      { checked: false, name: "Gracz 5", color: "purple" },
+      { checked: false, name: "Gracz 6", color: "black" }
     ] }
   },
   computed: {
@@ -117,16 +121,16 @@ Vue.component('game', {
           Pierwszy gracz: <player :player="players[0]" />                       \
         </p>                                                                    \
         <p><button @click="startRound(1, 40)">                                  \
-          Start rundy 1 [40s, <player :player="getFirstPlayerForRound(1)" />]   \
+          Runda 1 [40s, <player :player="getFirstPlayerForRound(1)" />]   \
         </button></p>                                                           \
         <p><button @click="startRound(2, 35)">                                  \
-          Start rundy 2 [35s, <player :player="getFirstPlayerForRound(2)" />]   \
+          Runda 2 [35s, <player :player="getFirstPlayerForRound(2)" />]   \
         </button></p>                                                           \
         <p><button @click="startRound(3, 30)">                                  \
-          Start rundy 3 [30s, <player :player="getFirstPlayerForRound(3)" />]   \
+          Runda 3 [30s, <player :player="getFirstPlayerForRound(3)" />]   \
         </button></p>                                                           \
         <p><button @click="startRound(4, 25)">                                  \
-          Start rundy 4 [25s, <player :player="getFirstPlayerForRound(4)" />]   \
+          Runda 4 [25s, <player :player="getFirstPlayerForRound(4)" />]   \
         </button></p>                                                           \
         <p><button @click="players = null">Koniec gry</button></p>              \
       </div>                                                                    \
