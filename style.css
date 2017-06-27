@@ -23,6 +23,7 @@ input[type=checkbox] { transform: scale(1.6) }
 
 .player-select .disabled {
   filter: grayscale(80%);
+  opacity: 0.8;
 }
 
 .timer {
@@ -41,6 +42,7 @@ input[type=checkbox] { transform: scale(1.6) }
   -ms-user-select: none;
   user-select: none;
 }
+
 .timer .seconds {
   font-size: 150px;
 }
@@ -50,14 +52,14 @@ input[type=checkbox] { transform: scale(1.6) }
 .timer.blue    { background-color: #1155FF; }
 .timer.yellow  { background-color: #FFCC00; }
 .timer.purple  { background-color: #8833DD; }
-.timer.brown   { background-color: #AA4400; }
+.timer.black   { background-color: #333333; }
 
 .timer.next-red     { box-shadow: 150px 0 #DD3311; }
 .timer.next-green   { box-shadow: 150px 0 #00BB33; }
 .timer.next-blue    { box-shadow: 150px 0 #1155FF; }
 .timer.next-yellow  { box-shadow: 150px 0 #FFCC00; }
 .timer.next-purple  { box-shadow: 150px 0 #8833DD; }
-.timer.next-brown   { box-shadow: 150px 0 #AA4400; }
+.timer.next-black   { box-shadow: 150px 0 #333333; }
 
 button {
   display: inline-block;
@@ -87,7 +89,7 @@ button {
 .player.blue    { color: #1155FF; }
 .player.yellow  { color: #FFCC00; }
 .player.purple  { color: #8833DD; }
-.player.brown   { color: #AA4400; }
+.player.black   { color: #333333; }
 
 .player-input {
   background: none;
@@ -109,7 +111,7 @@ button {
 .player-input.blue    { color: #1155FF; }
 .player-input.yellow  { color: #FFCC00; }
 .player-input.purple  { color: #8833DD; }
-.player-input.brown   { color: #AA4400; }
+.player-input.black   { color: #333333; }
 
 .color {
   margin-left: 5px;
@@ -124,7 +126,7 @@ button {
 .color.blue   .meeple { fill: #1155FF; }
 .color.yellow .meeple { fill: #FFCC00; }
 .color.purple .meeple { fill: #8833DD; }
-.color.brown  .meeple { fill: #AA4400; }
+.color.black  .meeple { fill: #333333; }
 
 
 /* #FFCC00 */
@@ -132,4 +134,4 @@ button {
 /* #00BB33 */
 /* #DD3311 */
 /* #8833DD */
-/* #AA4400 */
+/* #AA4400 #333333 */

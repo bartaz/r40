@@ -38,7 +38,7 @@ Vue.component('player-color', {
       return ['color', this.player.color]
     },
     nextColor: function() {
-      var colors = ["red", "green", "blue", "yellow", "purple", "brown"];
+      var colors = ["red", "green", "blue", "yellow", "purple", "black"];
 
       var current = colors.indexOf(this.player.color);
       var next = current < colors.length-1 ? current + 1 : 0;
@@ -85,7 +85,7 @@ Vue.component('player-select', {
       { checked: true, name: "Player 3", color: "blue" },
       { checked: false, name: "Player 4", color: "yellow" },
       { checked: false, name: "Player 5", color: "purple" },
-      { checked: false, name: "Player 6", color: "brown" }
+      { checked: false, name: "Player 6", color: "black" }
     ] }
   },
   computed: {
