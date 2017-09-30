@@ -186,7 +186,12 @@ Vue.component('game', {
 // ROUND COMPONENT
 
 Vue.component('round', {
-  template: '<turn v-if="currentTurn !== null" :nextPlayer="nextActivePlayer" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="endRound"></turn>',
+  template: ' \
+    <div> \
+    <round-init v-if="state === \'init\'" :player="playerTimes[0].player" :round="round" @startRound="startRound" /> \
+    <turn v-if="currentTurn !== null" :nextPlayer="nextActivePlayer" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="endRound"></turn> \
+    </div> \
+  ',
   props: ['round', 'players', 'time'],
   data: function() {
     var self = this;
@@ -199,7 +204,8 @@ Vue.component('round', {
       paused: true,
       currentPlayerId: 0,
       currentTurn: null,
-      nextActivePlayer: null
+      nextActivePlayer: null,
+      state: 'init' // 'started', 'end'
     }
   },
   computed: {
@@ -208,9 +214,7 @@ Vue.component('round', {
     }
   },
   mounted: function() {
-    this.currentPlayerId = 0;
-    this.currentTurn = this.playerTimes[0];
-    this.nextActivePlayer = this.playerTimes[1].player;
+    this.state = 'init';
   },
   methods: {
     pause: function(paused) {
@@ -242,11 +246,41 @@ Vue.component('round', {
         this.endRound();
       }
     },
+    startRound: function() {
+      this.state = 'started';
+      this.currentPlayerId = 0;
+      this.currentTurn = this.playerTimes[0];
+      this.nextActivePlayer = this.playerTimes[1].player;
+    },
     endRound: function() {
       // end round
       this.currentPlayerId = null;
       this.currentTurn = null;
       this.$emit('endRound');
+    }
+  }
+});
+
+// ROUND-INIT COMPONENT
+// ================
+Vue.component('round-init', {
+  template: '                                                                   \
+    <div>                                                                       \
+      <p>Runda: {{round}}</p>                                                   \
+      <p>Pierwszy gracz: <player :player="player"></player></p>                 \
+      <h3>Wydarzenie</h3>                                                       \
+      <p><player :player="player"></player> odsłania kartę wydarzenia i czyta ją na głos</p> \
+      <p><i>(ikonka klepsydry do zaznaczenia oraz ikonka wiru do zaznaczenia)</i></p> \
+      <h3>Pobieranie kart rozkazów</h3>                                         \
+      <p><player :player="player"></player> rozpoczyna fazę dobierania kart rozkazów.</p> \
+      <h3>Wykonywanie rozkazów</h3>                                             \
+      <p><button @click="startRound">Rozpocznij wykonywanie rozkazów</button></p> \
+    </div>                                                                      \
+  ',
+  props: ['round', 'player'],
+  methods: {
+    startRound: function() {
+      this.$emit('startRound');
     }
   }
 });
