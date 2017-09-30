@@ -188,7 +188,7 @@ Vue.component('game', {
 Vue.component('round', {
   template: ' \
     <div> \
-    <round-init v-if="state === \'init\'" :player="playerTimes[0].player" :round="round" @startRound="startRound" /> \
+    <round-init v-if="state === \'init\'" :config="config" :player="playerTimes[0].player" :round="round" @startRound="startRound" /> \
     <turn v-if="currentTurn !== null" :nextPlayer="nextActivePlayer" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="stopRound"></turn> \
     <round-end v-if="state === \'end\'" :player="playerTimes[0].player" :round="round" @endRound="endRound" /> \
     </div> \
@@ -202,6 +202,9 @@ Vue.component('round', {
           player: player,
           time: self.time === null ? self.time : self.time * 100 }
       }),
+      config: {
+        short: false,
+      },
       paused: true,
       currentPlayerId: 0,
       currentTurn: null,
@@ -244,11 +247,17 @@ Vue.component('round', {
         }
       } else {
         // end round
-        this.endRound();
+        this.stopRound();
       }
     },
     startRound: function() {
       this.state = 'started';
+
+      if (this.config.short) {
+        this.playerTimes.forEach(function(playerTime){
+          if (playerTime.time) playerTime.time -= 1000; // -10s
+        });
+      }
       this.currentPlayerId = 0;
       this.currentTurn = this.playerTimes[0];
       this.nextActivePlayer = this.playerTimes[1].player;
@@ -274,6 +283,7 @@ Vue.component('round-init', {
       <p>Pierwszy gracz: <player :player="player"></player></p>                 \
       <h3>Wydarzenie</h3>                                                       \
       <p><player :player="player"></player> odsłania kartę wydarzenia i czyta ją na głos</p> \
+      <p><label><input type="checkbox" v-model="config.short"/> Krótka runda</label></p> \
       <p><i>(ikonka klepsydry do zaznaczenia oraz ikonka wiru do zaznaczenia)</i></p> \
       <h3>Pobieranie kart rozkazów</h3>                                         \
       <p><player :player="player"></player> rozpoczyna fazę dobierania kart rozkazów.</p> \
@@ -281,7 +291,7 @@ Vue.component('round-init', {
       <p><button @click="startRound">Rozpocznij wykonywanie rozkazów</button></p> \
     </div>                                                                      \
   ',
-  props: ['round', 'player'],
+  props: ['round', 'player', 'config'],
   methods: {
     startRound: function() {
       this.$emit('startRound');
