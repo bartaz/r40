@@ -204,7 +204,9 @@ Vue.component('round', {
       }),
       config: {
         short: false,
+        alternate: false
       },
+      playerDirection: +1,
       paused: true,
       currentPlayerId: 0,
       currentTurn: null,
@@ -228,10 +230,15 @@ Vue.component('round', {
       this.currentTurn.time = time;
       if (this.activeTurns.length) {
         // next turn
-        var nextPlayer = this.currentPlayerId + 1;
-        if (!this.playerTimes[nextPlayer]) {
-          nextPlayer = 0;
+        var nextPlayer = this.currentPlayerId + this.playerDirection;
+
+        nextPlayer = (this.playerTimes.length + nextPlayer) % this.playerTimes.length;
+
+        // if we alternate the order and we reached 1st player, change the order
+        if (this.config.alternate && nextPlayer === 0) {
+          this.playerDirection = this.playerDirection * -1;
         }
+
         this.currentPlayerId = nextPlayer;
         this.currentTurn = this.playerTimes[nextPlayer];
 
@@ -239,7 +246,7 @@ Vue.component('round', {
         var nextActivePlayer = nextPlayer;
 
         do {
-          nextActivePlayer = (nextActivePlayer + 1) % this.playerTimes.length;
+          nextActivePlayer = (this.playerTimes.length + nextActivePlayer + this.playerDirection) % this.playerTimes.length;
         } while (!this.playerTimes[nextActivePlayer].time);
 
         if (this.playerTimes[nextActivePlayer].time > 0) {
@@ -284,6 +291,7 @@ Vue.component('round-init', {
       <h3>Wydarzenie</h3>                                                       \
       <p><player :player="player"></player> odsłania kartę wydarzenia i czyta ją na głos</p> \
       <p><label><input type="checkbox" v-model="config.short"/> Krótka runda</label></p> \
+      <p><label><input type="checkbox" v-model="config.alternate"/> Zmienna kolejność</label></p> \
       <p><i>(ikonka klepsydry do zaznaczenia oraz ikonka wiru do zaznaczenia)</i></p> \
       <h3>Pobieranie kart rozkazów</h3>                                         \
       <p><player :player="player"></player> rozpoczyna fazę dobierania kart rozkazów.</p> \
