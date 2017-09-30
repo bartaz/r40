@@ -189,7 +189,8 @@ Vue.component('round', {
   template: ' \
     <div> \
     <round-init v-if="state === \'init\'" :player="playerTimes[0].player" :round="round" @startRound="startRound" /> \
-    <turn v-if="currentTurn !== null" :nextPlayer="nextActivePlayer" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="endRound"></turn> \
+    <turn v-if="currentTurn !== null" :nextPlayer="nextActivePlayer" :paused="paused" :player="currentTurn.player" :time="currentTurn.time" :round="round" @pause="pause" @endTurn="endTurn" @endRound="stopRound"></turn> \
+    <round-end v-if="state === \'end\'" :player="playerTimes[0].player" :round="round" @endRound="endRound" /> \
     </div> \
   ',
   props: ['round', 'players', 'time'],
@@ -252,10 +253,13 @@ Vue.component('round', {
       this.currentTurn = this.playerTimes[0];
       this.nextActivePlayer = this.playerTimes[1].player;
     },
-    endRound: function() {
+    stopRound: function() {
       // end round
       this.currentPlayerId = null;
       this.currentTurn = null;
+      this.state = 'end';
+    },
+    endRound: function() {
       this.$emit('endRound');
     }
   }
@@ -281,6 +285,27 @@ Vue.component('round-init', {
   methods: {
     startRound: function() {
       this.$emit('startRound');
+    }
+  }
+});
+
+// ROUND-END COMPONENT
+// ================
+Vue.component('round-end', {
+  template: '                                                                   \
+    <div>                                                                       \
+      <h3>Koniec rundy {{round}}</h3>                                           \
+      <p>Pierwszy gracz: <player :player="player"></player></p>                 \
+      <h3>Podliczenie</h3>                                                      \
+      <p><player :player="player"></player> rozpoczyna fazę podliczenia.</p>    \
+      <p>Pamiętajcie o ewentualnych punktach związanych z wydarzeniem</p>       \
+      <p><button @click="endRound">Koniec rundy</button></p>                    \
+    </div>                                                                      \
+  ',
+  props: ['round', 'player'],
+  methods: {
+    endRound: function() {
+      this.$emit('endRound');
     }
   }
 });
