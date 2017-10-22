@@ -344,6 +344,7 @@ Vue.component('turn', {
       <div v-else>                                                                \
         <p><button @click="nextTurn">Następna tura [<player :player="nextPlayer"></player>]</button></p>\
         <p><button @click="pauseTurn">Pauza</button></p>\
+        <p><button @click="resetTurn">Cofnij</button></p>\
       </div> \
       <p><button @click="endRound">Koniec rundy</button></p>                    \
     </div>                                                                      \
@@ -431,6 +432,10 @@ Vue.component('turn', {
     },
     pauseTurn: function() {
       this.$emit('pause', true);
+    },
+    resetTurn: function() {
+      this.currentTime = this.time;
+      this.pauseTurn();
     }
   }
 });
