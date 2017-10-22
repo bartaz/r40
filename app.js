@@ -360,6 +360,10 @@ Vue.component('turn', {
   },
   watch: {
     player: function(player1, player2) {
+      if (this.time) {
+        this.currentTime = this.time;
+      }
+
       if (this.time && !this.paused) {
         this.startTimer(this.time);
       }
@@ -440,6 +444,7 @@ Vue.component('turn', {
     },
     passTurn: function() {
       this.currentTime = 0;
+      this.pauseTurn();
       this.endTurn();
     }
   }
