@@ -340,8 +340,11 @@ Vue.component('turn', {
         <timer :player="player" :nextPlayer="nextPlayer" :time="currentTime" @touchend.native.prevent="nextTurn"> \
         </timer>                                                                \
       </p>                                                                      \
-      <p v-if="paused"><button @click="nextTurn">Start tury</button></p>        \
-      <p v-else><button @click="nextTurn">Następna tura [<player :player="nextPlayer"></player>]</button></p> \
+      <p v-if="paused"><button @click="nextTurn">Start</button></p>        \
+      <div v-else>                                                                \
+        <p><button @click="nextTurn">Następna tura [<player :player="nextPlayer"></player>]</button></p>\
+        <p><button @click="pauseTurn">Pauza</button></p>\
+      </div> \
       <p><button @click="endRound">Koniec rundy</button></p>                    \
     </div>                                                                      \
   ',
@@ -383,15 +386,23 @@ Vue.component('turn', {
   },
   methods: {
     startTimer: function(time) {
+      // if interval is already running during turn ignore startTimer
+      // (possibly called when unpausing)
+      if (this.interval) {
+        return;
+      }
+
       this.currentTime = time;
       var self = this;
 
       this.interval = setInterval(function() {
-        self.currentTime = self.currentTime -1;
-        if (self.currentTime < 0) {
-          playExplosion();
+        if (!self.paused) {
+          self.currentTime = self.currentTime -1;
+          if (self.currentTime < 0) {
+            playExplosion();
 
-          self.stopTimer();
+            self.stopTimer();
+          }
         }
       }, 10);
     },
@@ -417,6 +428,9 @@ Vue.component('turn', {
     endRound: function() {
       this.stopTimer();
       this.$emit('endRound');
+    },
+    pauseTurn: function() {
+      this.$emit('pause', true);
     }
   }
 });
