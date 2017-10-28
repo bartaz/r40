@@ -1,6 +1,6 @@
 body {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  background: #F4F4F4;
+  background: #3399BB;
   padding: 20px;
   font-size: 20px;
   max-width: 500px;
@@ -47,17 +47,17 @@ input[type=checkbox] { transform: scale(1.6) }
   font-size: 150px;
 }
 
-.timer.red     { background-color: #DD3311; }
-.timer.green   { background-color: #00BB33; }
-.timer.blue    { background-color: #1155FF; }
-.timer.yellow  { background-color: #FFCC00; }
+.timer.white     { background-color: #FFFFFF; color: #333; }
+.timer.silver   { background-color: #C0C0C0; }
+.timer.orange    { background-color: #FFA500; }
+.timer.yellow  { background-color: #FFD700; }
 .timer.purple  { background-color: #8833DD; }
 .timer.black   { background-color: #333333; }
 
-.timer.next-red     { box-shadow: 150px 0 #DD3311; }
-.timer.next-green   { box-shadow: 150px 0 #00BB33; }
-.timer.next-blue    { box-shadow: 150px 0 #1155FF; }
-.timer.next-yellow  { box-shadow: 150px 0 #FFCC00; }
+.timer.next-white     { box-shadow: 150px 0 #FFFFFF; }
+.timer.next-silver   { box-shadow: 150px 0 #C0C0C0; }
+.timer.next-orange    { box-shadow: 150px 0 #FFA500; }
+.timer.next-yellow  { box-shadow: 150px 0 #FFD700; }
 .timer.next-purple  { box-shadow: 150px 0 #8833DD; }
 .timer.next-black   { box-shadow: 150px 0 #333333; }
 
@@ -82,12 +82,13 @@ button {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
+  background: rgba(255,255,255,0.5);
 }
 
-.player.red     { color: #DD3311; }
-.player.green   { color: #00BB33; }
-.player.blue    { color: #1155FF; }
-.player.yellow  { color: #FFCC00; }
+.player.white     { color: #FFFFFF; }
+.player.silver   { color: #C0C0C0; }
+.player.orange    { color: #FFA500; }
+.player.yellow  { color: #FFD700; }
 .player.purple  { color: #8833DD; }
 .player.black   { color: #333333; }
 
@@ -102,16 +103,18 @@ button {
   margin: 5px 0;
 }
 
-.player-input:focus {
-  background: rgba(255,255,255,0.5);
-}
 
-.player-input.red     { color: #DD3311; }
-.player-input.green   { color: #00BB33; }
-.player-input.blue    { color: #1155FF; }
-.player-input.yellow  { color: #FFCC00; }
+.player-input.white   { color: #FFFFFF; }
+.player-input.silver  { color: #C0C0C0; }
+.player-input.orange  { color: #FFA500; }
+.player-input.yellow  { color: #FFD700; }
 .player-input.purple  { color: #8833DD; }
 .player-input.black   { color: #333333; }
+
+.player-input:focus {
+  background: rgba(255,255,255,0.8);
+  color: #333;
+}
 
 .color {
   margin-left: 5px;
@@ -121,17 +124,17 @@ button {
   background-color: transparent;
 }
 
-.color.red    .meeple { fill: #DD3311; }
-.color.green  .meeple { fill: #00BB33; }
-.color.blue   .meeple { fill: #1155FF; }
-.color.yellow .meeple { fill: #FFCC00; }
+.color.white    .meeple { fill: #FFFFFF; }
+.color.silver  .meeple { fill: #C0C0C0; }
+.color.orange   .meeple { fill: #FFA500; }
+.color.yellow .meeple { fill: #FFD700; }
 .color.purple .meeple { fill: #8833DD; }
 .color.black  .meeple { fill: #333333; }
 
 
-/* #FFCC00 */
-/* #1155FF */
-/* #00BB33 */
-/* #DD3311 */
+/* #FFD700 */
+/* #FFA500 */
+/* #C0C0C0 */
+/* #FFFFFF */
 /* #8833DD */
 /* #AA4400 #333333 */
