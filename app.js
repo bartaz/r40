@@ -58,6 +58,7 @@ Vue.component('player-color', {
 Vue.component('player-select', {
   template: '                                                                   \
     <div class="player-select">                                                 \
+      <h1>Załoga Czarnej Perły</h1> \
       Wybierz graczy:                                                           \
       <ul id="example-1">                                                       \
         <li v-for="player in players" :class="{ disabled: !player.checked }">   \
@@ -73,7 +74,7 @@ Vue.component('player-select', {
         </li>                                                                   \
       </ul>                                                                     \
       <p>Liczba graczy: {{ numberOfPlayers }}</p>                               \
-      <p>                                                                       \
+      <p class="help">                                                          \
         <i>Kliknij pionek by zmienić kolor gracza.</i><br/>                     \
         <i>Kliknij nazwę gracza by wpisać imię.</i>                             \
       </p>                                                                      \
@@ -117,22 +118,20 @@ Vue.component('game', {
     <div>                                                                       \
       <player-select v-if="!players" @start="startGame" />                      \
       <div v-else-if="!activeRound">                                            \
-        <p @click="changeFirstPlayer">                                          \
-          Pierwszy gracz: <player :player="players[0]" />                       \
-        </p>                                                                    \
+        <h1>Załoga Czarnej Perły</h1> \
         <p><button @click="startRound(1, 30)">                                  \
-          Runda 1 [30s, <player :player="getFirstPlayerForRound(1)" />]   \
+          Runda 1   \
         </button></p>                                                           \
         <p><button @click="startRound(2, 30)">                                  \
-          Runda 2 [30s, <player :player="getFirstPlayerForRound(2)" />]   \
+          Runda 2   \
         </button></p>                                                           \
         <p><button @click="startRound(3, 30)">                                  \
-          Runda 3 [30s, <player :player="getFirstPlayerForRound(3)" />]   \
+          Runda 3   \
         </button></p>                                                           \
         <p><button @click="startRound(4, 30)">                                  \
-          Runda 4 [30s, <player :player="getFirstPlayerForRound(4)" />]   \
+          Runda 4   \
         </button></p>                                                           \
-        <p><button @click="players = null">Koniec gry</button></p>              \
+        <p><button @click="players = null">Zakończenie gry</button></p>         \
       </div>                                                                    \
       <round                                                                    \
         v-else-if="activeRound"                                                 \
@@ -286,17 +285,16 @@ Vue.component('round', {
 Vue.component('round-init', {
   template: '                                                                   \
     <div>                                                                       \
-      <p>Runda: {{round}}</p>                                                   \
-      <p>Pierwszy gracz: <player :player="player"></player></p>                 \
+      <h1>Runda {{round}}</h1>                                                   \
+      <p>Pierwszym graczem w tej rundzie jest <player :player="player"></player></p>                 \
       <h3>Wydarzenie</h3>                                                       \
-      <p><player :player="player"></player> odsłania kartę wydarzenia i czyta ją na głos</p> \
+      <p><player :player="player"></player> odkrywa kartę wydarzenia i czyta na głos zawarty na niej opis.</p> \
+      <h4>Wydarzenia specjalne</h4> \
       <p><label><input type="checkbox" v-model="config.short"/> Krótka runda</label></p> \
       <p><label><input type="checkbox" v-model="config.alternate"/> Zmienna kolejność</label></p> \
-      <p><i>(ikonka klepsydry do zaznaczenia oraz ikonka wiru do zaznaczenia)</i></p> \
-      <h3>Pobieranie kart rozkazów</h3>                                         \
-      <p><player :player="player"></player> rozpoczyna fazę dobierania kart rozkazów.</p> \
-      <h3>Wykonywanie rozkazów</h3>                                             \
-      <p><button @click="startRound">Rozpocznij wykonywanie rozkazów</button></p> \
+      <h3>Dobór kart rozkazów</h3>                                         \
+      <p><player :player="player"></player> rozpoczyna fazę dobierania kart rozkazów. Gdy wszyscy gracze spasują naciśnijcie przycisk Dalej.</p> \                                            \
+      <p><button @click="startRound">Dalej</button></p> \
     </div>                                                                      \
   ',
   props: ['round', 'player', 'config'],
@@ -312,11 +310,9 @@ Vue.component('round-init', {
 Vue.component('round-end', {
   template: '                                                                   \
     <div>                                                                       \
-      <h3>Koniec rundy {{round}}</h3>                                           \
-      <p>Pierwszy gracz: <player :player="player"></player></p>                 \
-      <h3>Podliczenie</h3>                                                      \
-      <p><player :player="player"></player> rozpoczyna fazę podliczenia.</p>    \
-      <p>Pamiętajcie o ewentualnych punktach związanych z wydarzeniem</p>       \
+      <h1>Podliczenie</h1>                                                      \
+      <p>Po przydzieleniu Kart Plusk każdy gracz stojący na pokładzie otrzymuje punkty zgodnie z wytycznymi kapitana.</p> \
+      <p>Następnie musicie zadbać o porządek na pokładzie. Skarby wrzućcie do ładowni, odrzućcie Karty Tozkazów i uzupełnijcie planszę pomocniczą." </p> \
       <p><button @click="endRound">Koniec rundy</button></p>                    \
     </div>                                                                      \
   ',
@@ -334,20 +330,19 @@ Vue.component('round-end', {
 Vue.component('turn', {
   template: '                                                                   \
     <div>                                                                       \
-      <p>Runda: {{round}}</p>                                                   \
-      <p>Gracz: <player :player="player"></player> > <player :player="nextPlayer"></player></p> \
+      <h1>Wykonywanie rozkazów</h1> \
       <p>                                                                       \
         <timer :player="player" :nextPlayer="nextPlayer" :time="currentTime" @touchend.native.prevent="nextTurn"> \
         </timer>                                                                \
       </p>                                                                      \
       <p v-if="paused"><button @click="nextTurn">Start</button></p>        \
       <div v-else>                                                                \
-        <p><button @click="nextTurn">Następna tura [<player :player="nextPlayer"></player>]</button></p>\
+        <p><button @click="nextTurn">Następny gracz to <player :player="nextPlayer"></player></button></p>\
         <p><button @click="passTurn">Pas</button></p>\
+        <p><button @click="resetTurn">Cofnij czas</button></p>\
         <p><button @click="pauseTurn">Pauza</button></p>\
-        <p><button @click="resetTurn">Cofnij</button></p>\
       </div> \
-      <p><button @click="endRound">Koniec rundy</button></p>                    \
+      <p><button @click="endRound">Koniec fazy</button></p>                    \
     </div>                                                                      \
   ',
   props: ['round', 'player', 'time', 'paused', 'nextPlayer'],
